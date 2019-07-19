@@ -1,12 +1,14 @@
+import { Empty, Typography } from "antd";
+
 import React from "react";
-import { Typography } from "antd";
 
 const { Title } = Typography;
 
 const LongestPallindrome = ({ longestPallindrome }) => {
-  return (
+  return !longestPallindrome ? (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+  ) : (
     <div id="longestPallindrome">
-      <Title level={3}>Самый длинный Паллиндром</Title>
       <Title level={4}>{longestPallindrome}</Title>
     </div>
   );

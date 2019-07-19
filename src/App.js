@@ -1,21 +1,21 @@
 import "./App.css";
 
-import { Button, Divider, Layout } from "antd";
-import React, { Fragment, useState } from "react";
+import { Button, Layout } from "antd";
+import React, { useState } from "react";
 import { highlightPalindrome, palindromeChecker } from "./helpers";
 
 import FileContent from "./FileContent";
+import HighlightedPallindromes from "./HighlightedPallindromes";
 import LongestPallindrome from "./LongestPallindrome";
 import Pallindromes from "./Pallindromes";
 
 const { Content } = Layout;
 
 const App = () => {
+  const [text, setText] = useState("");
   const [pallindromes, setPallindromes] = useState([]);
   const [longestPallindrome, setLongestPallindrome] = useState("");
-  const [text, setText] = useState("");
-
-  const highlightedWrapper = document.getElementById("textWithPallindromes");
+  const [highlightedText, setHighlightedText] = useState(null);
 
   const findPallindroms = () => {
     const splitedText = text.split(/\s*,\s*/);
@@ -25,7 +25,7 @@ const App = () => {
     )[0];
     setPallindromes(palindromeData);
     setLongestPallindrome(longestPalindrome);
-    highlightedWrapper.innerHTML = highlightPalindrome(text, palindromeData);
+    setHighlightedText(highlightPalindrome(text, palindromeData));
   };
 
   const uploadFile = () => {
@@ -50,40 +50,40 @@ const App = () => {
 
   const clear = () => {
     const file = document.querySelector("input[type=file]");
-    const preview = document.getElementById("show-text");
     setText("");
     setPallindromes([]);
     setLongestPallindrome("");
     file.value = "";
-    preview.innerHTML = "";
-    highlightedWrapper.innerHTML = "";
+    setHighlightedText("");
   };
 
   return (
     <Layout>
       <Content>
         <input type="file" onChange={uploadFile} />
-        <Divider>Text</Divider>
         <FileContent text={text} />
-        <Divider>Text</Divider>
         <Pallindromes pallindromes={pallindromes} />
-
-        <Divider>Text</Divider>
         <LongestPallindrome longestPallindrome={longestPallindrome} />
-        <Divider>Text</Divider>
-        <div id="textWithPallindromes" />
-        <Divider>Text</Divider>
+        <HighlightedPallindromes highlightedText={highlightedText} />
         <Button
-          type="primary"
-          size="large"
           block
-          onClick={findPallindroms}
+          disabled={!text ? true : false}
           icon="search"
+          onClick={findPallindroms}
+          size="large"
+          type="primary"
         >
-          Find Pallindroms
+          Find Pallindromes
         </Button>
-        <Button type="dashed" size="large" block onClick={clear} icon="delete">
-          Clear
+        <Button
+          block
+          disabled={!text ? true : false}
+          icon="delete"
+          onClick={clear}
+          size="large"
+          type="dashed"
+        >
+          Reset
         </Button>
       </Content>
     </Layout>

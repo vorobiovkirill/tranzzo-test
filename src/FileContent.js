@@ -1,10 +1,13 @@
+import { Empty, Typography } from "antd";
+
 import React from "react";
-import { Typography } from "antd";
 
 const { Paragraph } = Typography;
 
 const FileContent = ({ text }) => {
-  return (
+  return !text ? (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+  ) : (
     <div id="palindromeDataPreview">
       <Paragraph ellipsis={{ rows: 3, expandable: true }}>{text}</Paragraph>
     </div>
