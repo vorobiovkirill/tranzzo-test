@@ -1,7 +1,14 @@
 import "./App.css";
 
+import { Button, Divider, Layout } from "antd";
 import React, { Fragment, useState } from "react";
 import { highlightPalindrome, palindromeChecker } from "./helpers";
+
+import FileContent from "./FileContent";
+import LongestPallindrome from "./LongestPallindrome";
+import Pallindromes from "./Pallindromes";
+
+const { Content } = Layout;
 
 const App = () => {
   const [pallindromes, setPallindromes] = useState([]);
@@ -23,7 +30,6 @@ const App = () => {
 
   const uploadFile = () => {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
-      const preview = document.getElementById("show-text");
       const file = document.querySelector("input[type=file]").files[0];
       const reader = new FileReader();
 
@@ -32,11 +38,9 @@ const App = () => {
       if (file.type.match(textFile)) {
         reader.onload = function(event) {
           setText(event.target.result);
-          preview.innerHTML = event.target.result;
         };
       } else {
-        preview.innerHTML =
-          "<span class='error'>It doesn't seem to be a text file!</span>";
+        setText("It doesnt seem to be a text file!");
       }
       reader.readAsText(file, "cP1251");
     } else {
@@ -56,26 +60,33 @@ const App = () => {
   };
 
   return (
-    <Fragment>
-      <input type="file" onChange={uploadFile} />
-      <div id="show-text">Choose text File</div>
-      <div id="palindromeDataPreview" />
-      <button type="button" onClick={findPallindroms}>
-        Find Pallindroms
-      </button>
-      <button type="button" onClick={clear}>
-        Clear
-      </button>
-      <div id="pallindromes">
-        <ul>
-          {pallindromes.map(p => (
-            <li key={p}>{p}</li>
-          ))}
-        </ul>
-      </div>
-      <div id="longestPallindrome">{longestPallindrome}</div>
-      <div id="textWithPallindromes" />
-    </Fragment>
+    <Layout>
+      <Content>
+        <input type="file" onChange={uploadFile} />
+        <Divider>Text</Divider>
+        <FileContent text={text} />
+        <Divider>Text</Divider>
+        <Pallindromes pallindromes={pallindromes} />
+
+        <Divider>Text</Divider>
+        <LongestPallindrome longestPallindrome={longestPallindrome} />
+        <Divider>Text</Divider>
+        <div id="textWithPallindromes" />
+        <Divider>Text</Divider>
+        <Button
+          type="primary"
+          size="large"
+          block
+          onClick={findPallindroms}
+          icon="search"
+        >
+          Find Pallindroms
+        </Button>
+        <Button type="dashed" size="large" block onClick={clear} icon="delete">
+          Clear
+        </Button>
+      </Content>
+    </Layout>
   );
 };
 
